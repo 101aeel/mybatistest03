@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.demo.dao.EmpMapper">
+
+    <!--===========================关联查询-单独查询形式=================-->
+    <!--一对一关联查询-->
+    <resultMap id="emp_dept_one" type="emp">
+        <id property="empno" column="empno"></id>
+        <result property="ename" column="ename"></result>
+        <result property="job" column="job"></result>
+        <result property="mgr" column="mgr"></result>
+        <result property="hiredate" column="hiredate"></result>
+        <result property="sal" column="sal"></result>
+        <result property="comm" column="comm"></result>
+        <result property="deptno" column="deptno"></result>
+        <association property="dept" javaType="dept" select="com.neuedu.demo.dao.DeptMapper.queryDeptByDeptno" column="deptno">
+
+        </association>
+    </resultMap>
+
+    <!--public Emp queryEmpAndDeptByEmpno(Integer empno);-->
+    <select id="queryEmpAndDeptByEmpno" resultMap="emp_dept_one" parameterType="int">
+        select * from emp where empno=#{empno}
+    </select>
+
+    <!--public List<Emp> queryAllEmp();-->
+    <select id="queryAllEmp" resultMap="emp_dept_one">
+      select * from emp
+    </select>
+
+    <!--
+        一对多关联查询
+        此查询可以不在接口中书写响应的方法
+      -->
+    <select id="queryEmpByDeptno" parameterType="int" resultType="emp">
+      select * from emp where deptno=#{deptno}
+    </select>
+
+    <!--使用DTO封装查询数据-->
+    <select id="queryAllMessage" resultType="EmpDeptDTO">
+      select * from emp e,dept d where e.deptno=d.deptno
+    </select>
+
+
+</mapper>

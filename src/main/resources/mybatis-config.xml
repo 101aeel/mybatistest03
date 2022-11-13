@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <properties resource="db.properties"></properties>
+    <!--注意： 要使用关联查询的延迟加载，就必须要使用单独查询形式。-->
+    <!--并且，需要先启用MyBatis的延迟加载配置（需要配置两项）：-->
+    <!--1. lazyLoadingEnabled：延迟加载的全局开关（默认为false）。-->
+    <!--2. aggressiveLazyLoading：延迟加载整个对象（默认为true； -->
+    <!--false：对象的每个属性都会延迟加载，即属性按需加载）-->
+    <settings>
+        <!--如果aggressiveLazyLoading为true，那么lazyLoadingEnabled即使为true也无效。-->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <setting name="aggressiveLazyLoading" value="false"/>
+
+        <!-- 开启二级缓存 -->
+        <setting name="cacheEnabled" value="true"/>
+        <setting name="logImpl" value="LOG4J"/>
+
+    </settings>
+
+    <typeAliases>
+        <package name="com.neuedu.demo.pojo"></package>
+        <package name="com.neuedu.demo.dto"></package>
+    </typeAliases>
+    
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"></transactionManager>
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}" />
+                <property name="url" value="${jdbc.url}" />
+                <property name="username" value="${jdbc.username}" />
+                <property name="password" value="${jdbc.password}" />
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <package name="com.neuedu.demo.dao"></package>
+    </mappers>
+</configuration>

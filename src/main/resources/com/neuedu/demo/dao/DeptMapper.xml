@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.demo.dao.DeptMapper">
+
+    <!--===========================关联查询-单独查询形式=================-->
+    <!--
+        一对一关联查询
+         注意：此查询可以不在接口中书写响应的方法
+    -->
+    <!--public Dept queryDeptByDeptno(Integer deptno);-->
+    <select id="queryDeptByDeptno" resultType="dept" parameterType="int">
+      select * from dept where deptno=#{deptno}
+    </select>
+    <!--一对多关联查询-->
+    <resultMap id="dept_emp_many" type="dept">
+        <id property="deptno" column="deptno"></id>
+        <result property="dname" column="dname"></result>
+        <result property="loc" column="loc"></result>
+        <result property="type" column="type"></result>
+        <collection property="empList" ofType="emp" select="com.neuedu.demo.dao.EmpMapper.queryEmpByDeptno" column="deptno">
+
+        </collection>
+    </resultMap>
+    <!--public Dept queryDeptAndEmpsByDeptno(Integer deptno);-->
+    <select id="queryDeptAndEmpsByDeptno" resultMap="dept_emp_many" parameterType="int">
+      select * from dept where deptno=#{deptno}
+    </select>
+</mapper>
